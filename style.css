@@ -721,56 +721,182 @@ html, body {
 
 /* ================= 10. RESPONSIVE MOBILE OPTIMIZATION ================= */
 @media (max-width: 768px) {
-  .master-header { margin-top: 2px; }
-  .guild-seal-strip { margin-top: 4px; }
-  .seal-text { font-size: 10.5px; letter-spacing: 0.18em; }
+  #stage {
+    position: relative;
+    min-height: 100dvh;
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    justify-content: flex-start;
+    align-items: center;
+    padding: calc(12px + env(safe-area-inset-top, 8px)) 12px calc(24px + env(safe-area-inset-bottom, 12px));
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
 
+  /* Header thanh mảnh, vừa vặn không bị chen chúc */
+  .master-header {
+    margin-top: 0;
+    flex-shrink: 0;
+  }
+
+  .royal-badge {
+    padding: 3px 12px;
+    gap: 6px;
+  }
+
+  .royal-badge .badge-text {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+
+  .main-title {
+    font-size: clamp(38px, 11vw, 48px);
+    line-height: 1.02;
+  }
+
+  .subtitle-serif {
+    font-size: 14.5px;
+    margin-top: -3px;
+    letter-spacing: 0.08em;
+  }
+
+  .guild-seal-strip {
+    margin-top: 3px;
+    gap: 8px;
+  }
+
+  .seal-line {
+    width: 20px;
+  }
+
+  .seal-text {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+  }
+
+  /* Họa tiết hoa sen & quạt lụa: Đặt làm biểu tượng trung tâm mềm mại */
   .artwork-stage {
-    top: 36%;
-    width: min(60vw, 210px);
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    width: 105px;
+    height: 105px;
+    margin: -2px auto;
+    flex-shrink: 0;
+    z-index: 6;
+  }
+
+  /* Hệ thống lời chúc trên mobile: Băng chuyền cuộn ngang vuốt mượt mà (Không chồng lấn) */
+  #wishesGrid {
+    position: relative;
+    inset: auto;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 8px;
+    padding: 2px 4px 6px;
+    width: calc(100vw - 24px);
+    max-width: 440px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    flex-shrink: 0;
+    z-index: 10;
+  }
+
+  #wishesGrid::-webkit-scrollbar {
+    display: none;
   }
 
   .wish-card {
-    padding: 6px 12px;
+    position: static !important;
+    transform: none !important;
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+    max-width: none !important;
+    display: inline-flex !important;
+    white-space: nowrap;
     font-size: 11px;
+    padding: 5px 12px;
     gap: 6px;
-    max-width: 44vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    border-radius: 20px;
+    background: rgba(22, 9, 36, 0.78);
+    border: 1px solid rgba(243, 208, 137, 0.32);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    animation: none !important;
   }
 
-  /* Trên mobile, xếp gọn 4 lời chúc tinh tế ở 2 bên cánh */
-  .wish-card.pos-l1 { left: 2%; top: 22%; }
-  .wish-card.pos-l2 { left: 2%; top: 33%; }
-  .wish-card.pos-l3 { display: none; }
-
-  .wish-card.pos-r1 { right: 2%; top: 22%; }
-  .wish-card.pos-r2 { right: 2%; top: 33%; }
-  .wish-card.pos-r3 { display: none; }
-
+  /* Card Bức Tâm Thư vừa vặn hoàn hảo */
   .letter-bento {
-    width: 95vw;
-    margin-bottom: 4px;
-  }
-  .bento-content {
-    padding: 14px 14px 12px;
-  }
-  .recipient-heading {
-    font-size: 21px;
-    margin-bottom: 6px;
-  }
-  .letter-body {
-    font-size: 11.5px;
-    line-height: 1.5;
+    width: 100%;
+    max-width: 440px;
+    flex-shrink: 0;
     margin-bottom: 8px;
   }
+
+  .bento-content {
+    padding: 14px 12px 12px;
+    border-radius: 16px;
+  }
+
+  .guild-stamp {
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+
+  .stamp-box {
+    font-size: 11px;
+    padding: 1px 5px;
+  }
+
+  .stamp-sub {
+    font-size: 9px;
+  }
+
+  .recipient-heading {
+    font-size: 18.5px;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+
+  .letter-body {
+    font-size: 11.5px;
+    line-height: 1.52;
+    margin-bottom: 8px;
+    text-align: left;
+  }
+
   .letter-sign {
-    font-size: 13px;
+    font-size: 12px;
     margin-bottom: 10px;
   }
+
+  .bento-actions {
+    gap: 8px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
   .action-btn {
     padding: 7px 13px;
-    font-size: 12px;
+    font-size: 11px;
+    gap: 6px;
+  }
+
+  .interaction-tip {
+    font-size: 9px;
+    margin-top: 8px;
+  }
+
+  .card-copyright {
+    font-size: 8.5px;
+    letter-spacing: 0.08em;
+    padding-top: 6px;
+    margin-top: 8px;
+    gap: 6px;
   }
 }
 
