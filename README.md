@@ -19,4 +19,6 @@ Trang web chúc mừng ngày Phụ Nữ Việt Nam 20/10 dành riêng cho toàn 
 ---
 
 ## 🚀 Trải Nghiệm Trực Tiếp
+- **Website Chính Thức**: [https://20-10-niendu.vercel.app](https://20-10-niendu.vercel.app)
+- **Website Phụ**: [https://2010-niendu.vercel.app](https://2010-niendu.vercel.app)
 - **Discord Bang**: [https://discord.gg/niendu](https://discord.gg/niendu)
