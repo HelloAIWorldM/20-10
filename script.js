@@ -517,47 +517,12 @@
     });
   });
 
-  // ================= 7. TỰ ĐỘNG CHUYỀN BĂNG THẺ LỜI CHÚC TRÊN MOBILE =================
-  const wishesGrid = $('#wishesGrid');
-  let isTouchingWishes = false;
-
-  function initMobileWishesAutoScroll() {
-    if (!wishesGrid) return;
-
-    // Nhân bản danh sách thẻ để tạo vòng lặp vô tận mượt mà
-    const originalCards = Array.from(wishesGrid.querySelectorAll('.wish-card:not(.cloned)'));
-    originalCards.forEach(card => {
-      const clone = card.cloneNode(true);
-      clone.classList.add('cloned');
-      wishesGrid.appendChild(clone);
-    });
-
-    wishesGrid.addEventListener('touchstart', () => { isTouchingWishes = true; }, { passive: true });
-    wishesGrid.addEventListener('touchend', () => { isTouchingWishes = false; }, { passive: true });
-    wishesGrid.addEventListener('mouseenter', () => { isTouchingWishes = true; });
-    wishesGrid.addEventListener('mouseleave', () => { isTouchingWishes = false; });
-
-    function autoScrollTick() {
-      if (window.innerWidth <= 768 && !isTouchingWishes) {
-        wishesGrid.scrollLeft += 0.8;
-        const maxScroll = wishesGrid.scrollWidth / 2;
-        if (wishesGrid.scrollLeft >= maxScroll) {
-          wishesGrid.scrollLeft = 0;
-        }
-      }
-      requestAnimationFrame(autoScrollTick);
-    }
-
-    requestAnimationFrame(autoScrollTick);
-  }
-
-  // ================= 8. KHỞI TẠO HỆ THỐNG =================
+  // ================= 7. KHỞI TẠO HỆ THỐNG =================
   function init() {
     resizeFogCanvas();
     resizeFireworksCanvas();
     initAmbientParticles();
     animateFireworks();
-    initMobileWishesAutoScroll();
   }
 
   window.addEventListener('resize', () => {

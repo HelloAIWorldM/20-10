@@ -313,8 +313,12 @@ html, body {
   transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
+.marquee-track {
+  display: contents;
+}
+
 .wish-card.cloned {
-  display: none;
+  display: none !important;
 }
 
 .wish-card .card-icon {
@@ -792,39 +796,68 @@ html, body {
     z-index: 6;
   }
 
-  /* Hệ thống lời chúc trên mobile: Băng chuyền cuộn ngang vuốt mượt mà (Không chồng lấn) */
+  /* Hệ thống lời chúc trên mobile: Băng chuyền chuyển động mượt mà bằng phần cứng (Pure CSS Infinite Marquee) */
   #wishesGrid {
     position: relative;
     inset: auto;
-    display: flex;
-    overflow-x: auto;
-    gap: 8px;
-    padding: 2px 4px 6px;
-    width: calc(100vw - 24px);
+    display: block;
+    width: 100%;
     max-width: 440px;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
+    margin: 2px 0 6px 0;
+    overflow: hidden;
+    padding: 4px 0;
     flex-shrink: 0;
     z-index: 10;
+    mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
   }
 
-  #wishesGrid::-webkit-scrollbar {
-    display: none;
+  .marquee-track {
+    display: flex !important;
+    gap: 10px;
+    width: max-content;
+    will-change: transform;
+    animation: marqueeFlow 22s linear infinite !important;
+    -webkit-animation: marqueeFlow 22s linear infinite !important;
+  }
+
+  @keyframes marqueeFlow {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @-webkit-keyframes marqueeFlow {
+    0% {
+      -webkit-transform: translate3d(0, 0, 0);
+    }
+    100% {
+      -webkit-transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  .marquee-track:hover,
+  .marquee-track:active {
+    animation-play-state: paused !important;
+    -webkit-animation-play-state: paused !important;
   }
 
   .wish-card {
     position: static !important;
     transform: none !important;
-    flex: 0 0 auto;
+    flex: 0 0 auto !important;
     max-width: none !important;
     display: inline-flex !important;
-    white-space: nowrap;
+    white-space: nowrap !important;
     font-size: 11px;
-    padding: 5px 12px;
+    padding: 6px 14px;
     gap: 6px;
     border-radius: 20px;
-    background: rgba(22, 9, 36, 0.78);
-    border: 1px solid rgba(243, 208, 137, 0.32);
+    background: rgba(22, 9, 36, 0.85);
+    border: 1px solid rgba(243, 208, 137, 0.35);
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
     animation: none !important;
   }

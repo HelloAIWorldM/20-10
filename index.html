@@ -116,34 +116,60 @@
       </svg>
     </div>
 
-    <!-- Hệ thống Lời chúc Dát Vàng (Curated Guild Badges) -->
+    <!-- Hệ thống Lời chúc Dát Vàng (Curated Guild Badges & Mobile Marquee) -->
     <div id="wishesGrid">
-      <!-- Cột Trái -->
-      <div class="wish-card pos-l1" style="--delay: 0s;">
-        <span class="card-icon">❖</span>
-        <span class="card-text">Khí chất ngút ngàn • Đệ nhất mỹ nhân</span>
-      </div>
-      <div class="wish-card pos-l2" style="--delay: 1.4s;">
-        <span class="card-icon">❖</span>
-        <span class="card-text">Nhan sắc khuynh thành • Rạng ngời nụ cười</span>
-      </div>
-      <div class="wish-card pos-l3" style="--delay: 0.8s;">
-        <span class="card-icon">❖</span>
-        <span class="card-text">PK đỉnh cao • Bách chiến bách thắng</span>
-      </div>
+      <div class="marquee-track">
+        <!-- 6 Thẻ lời chúc chính thức -->
+        <div class="wish-card pos-l1" style="--delay: 0s;">
+          <span class="card-icon">❖</span>
+          <span class="card-text">Khí chất ngút ngàn • Đệ nhất mỹ nhân</span>
+        </div>
+        <div class="wish-card pos-l2" style="--delay: 1.4s;">
+          <span class="card-icon">❖</span>
+          <span class="card-text">Nhan sắc khuynh thành • Rạng ngời nụ cười</span>
+        </div>
+        <div class="wish-card pos-l3" style="--delay: 0.8s;">
+          <span class="card-icon">❖</span>
+          <span class="card-text">PK đỉnh cao • Bách chiến bách thắng</span>
+        </div>
+        <div class="wish-card pos-r1" style="--delay: 0.4s;">
+          <span class="card-icon">❖</span>
+          <span class="card-text">Vạn dặm giang hồ • Niên Du là chốn về</span>
+        </div>
+        <div class="wish-card pos-r2" style="--delay: 1.8s;">
+          <span class="card-icon">❖</span>
+          <span class="card-text">Tâm an như ngọc • Vận son ngập tràn</span>
+        </div>
+        <div class="wish-card pos-r3" style="--delay: 1.1s;">
+          <span class="card-icon">❖</span>
+          <span class="card-text">Mãi là hậu phương vững chãi & kiêu hãnh</span>
+        </div>
 
-      <!-- Cột Phải -->
-      <div class="wish-card pos-r1" style="--delay: 0.4s;">
-        <span class="card-icon">❖</span>
-        <span class="card-text">Vạn dặm giang hồ • Niên Du là chốn về</span>
-      </div>
-      <div class="wish-card pos-r2" style="--delay: 1.8s;">
-        <span class="card-icon">❖</span>
-        <span class="card-text">Tâm an như ngọc • Vận son ngập tràn</span>
-      </div>
-      <div class="wish-card pos-r3" style="--delay: 1.1s;">
-        <span class="card-icon">❖</span>
-        <span class="card-text">Mãi là hậu phương vững chãi & kiêu hãnh</span>
+        <!-- 6 Thẻ nhân bản tạo vòng lặp vô tận mượt mà trên Mobile (Hardware CSS Animation) -->
+        <div class="wish-card pos-l1 cloned" aria-hidden="true">
+          <span class="card-icon">❖</span>
+          <span class="card-text">Khí chất ngút ngàn • Đệ nhất mỹ nhân</span>
+        </div>
+        <div class="wish-card pos-l2 cloned" aria-hidden="true">
+          <span class="card-icon">❖</span>
+          <span class="card-text">Nhan sắc khuynh thành • Rạng ngời nụ cười</span>
+        </div>
+        <div class="wish-card pos-l3 cloned" aria-hidden="true">
+          <span class="card-icon">❖</span>
+          <span class="card-text">PK đỉnh cao • Bách chiến bách thắng</span>
+        </div>
+        <div class="wish-card pos-r1 cloned" aria-hidden="true">
+          <span class="card-icon">❖</span>
+          <span class="card-text">Vạn dặm giang hồ • Niên Du là chốn về</span>
+        </div>
+        <div class="wish-card pos-r2 cloned" aria-hidden="true">
+          <span class="card-icon">❖</span>
+          <span class="card-text">Tâm an như ngọc • Vận son ngập tràn</span>
+        </div>
+        <div class="wish-card pos-r3 cloned" aria-hidden="true">
+          <span class="card-icon">❖</span>
+          <span class="card-text">Mãi là hậu phương vững chãi & kiêu hãnh</span>
+        </div>
       </div>
     </div>
 
