@@ -61,19 +61,50 @@
     toggleAudio();
   });
 
-  // ================= 4. HỆ THỐNG LAU KÍNH SƯƠNG (FOG CANVAS) =================
+  // ================= 4. HỆ THỐNG LAU KÍNH SƯƠNG (FOG CANVAS) - ULTRA FAST =================
   let isWiping = false;
   let lastX = 0;
   let lastY = 0;
   let isFogCleared = false;
   let checkProgressTimer = null;
-  const wipeRadius = window.innerWidth < 768 ? 38 : 52;
+  let wipeRadius = window.innerWidth < 768 ? 44 : 56;
+
+  // Cọ lau sương mềm được Pre-render sẵn trên Offscreen Canvas (GPU Accelerated)
+  let brushCanvas = document.createElement('canvas');
+  let brushSize = wipeRadius * 2;
+
+  function updateBrush() {
+    wipeRadius = window.innerWidth < 768 ? 44 : 56;
+    brushSize = wipeRadius * 2;
+    brushCanvas.width = brushSize;
+    brushCanvas.height = brushSize;
+    const bCtx = brushCanvas.getContext('2d');
+    bCtx.clearRect(0, 0, brushSize, brushSize);
+
+    const grad = bCtx.createRadialGradient(wipeRadius, wipeRadius, wipeRadius * 0.25, wipeRadius, wipeRadius, wipeRadius);
+    grad.addColorStop(0, 'rgba(0, 0, 0, 1)');
+    grad.addColorStop(0.65, 'rgba(0, 0, 0, 0.88)');
+    grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+    bCtx.fillStyle = grad;
+    bCtx.beginPath();
+    bCtx.arc(wipeRadius, wipeRadius, wipeRadius, 0, Math.PI * 2);
+    bCtx.fill();
+  }
+
+  // Canvas lấy mẫu kiểm tra tiến độ lau cố định (tránh tạo lại DOM liên tục)
+  const sampleDim = 40;
+  const sampleCanvas = document.createElement('canvas');
+  sampleCanvas.width = sampleDim;
+  sampleCanvas.height = sampleDim;
+  const sampleCtx = sampleCanvas.getContext('2d', { willReadFrequently: true });
 
   function resizeFogCanvas() {
     const dpr = window.devicePixelRatio || 1;
     fogCanvas.width = window.innerWidth * dpr;
     fogCanvas.height = window.innerHeight * dpr;
     fogCtx.scale(dpr, dpr);
+    updateBrush();
     drawFrostLayer();
   }
 
@@ -93,7 +124,7 @@
     fogCtx.fillRect(0, 0, w, h);
 
     // Tạo các giọt nước ngưng tụ & hạt sương li ti trên mặt kính
-    for (let i = 0; i < 500; i++) {
+    for (let i = 0; i < 450; i++) {
       const rx = Math.random() * w;
       const ry = Math.random() * h;
       const r = Math.random() * 2.8 + 0.6;
@@ -104,7 +135,7 @@
     }
 
     // Những vệt hơi nước đọng mờ ảo
-    for (let i = 0; i < 35; i++) {
+    for (let i = 0; i < 30; i++) {
       const bx = Math.random() * w;
       const by = Math.random() * h;
       const br = Math.random() * 85 + 35;
@@ -118,53 +149,34 @@
     }
   }
 
-  // Tẩy sương bằng cọ tròn mềm (Soft Radial Mask)
+  // Tẩy sương siêu tốc bằng drawImage từ cọ Pre-rendered (0.01ms / lần)
   function eraseAt(x, y) {
-    fogCtx.save();
     fogCtx.globalCompositeOperation = 'destination-out';
-
-    const grad = fogCtx.createRadialGradient(x, y, wipeRadius * 0.35, x, y, wipeRadius);
-    grad.addColorStop(0, 'rgba(0, 0, 0, 1)');
-    grad.addColorStop(0.7, 'rgba(0, 0, 0, 0.85)');
-    grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-
-    fogCtx.fillStyle = grad;
-    fogCtx.beginPath();
-    fogCtx.arc(x, y, wipeRadius, 0, Math.PI * 2);
-    fogCtx.fill();
-    fogCtx.restore();
+    fogCtx.drawImage(brushCanvas, x - wipeRadius, y - wipeRadius);
   }
 
-  // Nội suy đường đi giữa 2 điểm chạm (tránh đứt đoạn khi vuốt nhanh)
+  // Nội suy đường đi mượt mà không gián đoạn
   function interpolateWipe(x1, y1, x2, y2) {
     const dist = Math.hypot(x2 - x1, y2 - y1);
-    const step = wipeRadius * 0.3;
-    const steps = Math.ceil(dist / step);
+    const step = wipeRadius * 0.45;
+    const steps = Math.max(1, Math.ceil(dist / step));
 
-    for (let i = 0; i <= steps; i++) {
-      const t = steps === 0 ? 0 : i / steps;
-      const x = x1 + (x2 - x1) * t;
-      const y = y1 + (y2 - y1) * t;
-      eraseAt(x, y);
+    for (let i = 1; i <= steps; i++) {
+      const t = i / steps;
+      eraseAt(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t);
     }
   }
 
-  // Kiểm tra độ sạch của kính
+  // Kiểm tra độ sạch của kính siêu nhẹ
   function calculateWipeProgress() {
     if (isFogCleared) return;
 
-    const sampleWidth = 60;
-    const sampleHeight = 60;
-    const offCanvas = document.createElement('canvas');
-    offCanvas.width = sampleWidth;
-    offCanvas.height = sampleHeight;
-    const offCtx = offCanvas.getContext('2d');
-
-    offCtx.drawImage(fogCanvas, 0, 0, sampleWidth, sampleHeight);
-    const imgData = offCtx.getImageData(0, 0, sampleWidth, sampleHeight).data;
+    sampleCtx.clearRect(0, 0, sampleDim, sampleDim);
+    sampleCtx.drawImage(fogCanvas, 0, 0, sampleDim, sampleDim);
+    const imgData = sampleCtx.getImageData(0, 0, sampleDim, sampleDim).data;
 
     let transparentPixels = 0;
-    const totalPixels = sampleWidth * sampleHeight;
+    const totalPixels = sampleDim * sampleDim;
 
     for (let i = 3; i < imgData.length; i += 4) {
       if (imgData[i] < 128) {
@@ -173,8 +185,8 @@
     }
 
     const progress = transparentPixels / totalPixels;
-    // Khi lau sạch trên 45% diện tích -> Tự động mở toàn bộ
-    if (progress > 0.45) {
+    // Khi lau sạch trên 38% diện tích -> Tự động khai mở quà
+    if (progress > 0.38) {
       clearFog();
     }
   }
@@ -210,7 +222,7 @@
     clearFog();
   });
 
-  // Sự kiện chạm & chuột
+  // Sự kiện chạm & chuột tức thì (Zero Latency)
   function handleStart(x, y) {
     if (isFogCleared) return;
     ensureAudioStarted();
@@ -230,11 +242,12 @@
       checkProgressTimer = setTimeout(() => {
         calculateWipeProgress();
         checkProgressTimer = null;
-      }, 250);
+      }, 300);
     }
   }
 
   function handleEnd() {
+    if (!isWiping) return;
     isWiping = false;
     calculateWipeProgress();
   }
@@ -248,17 +261,18 @@
       const touch = e.touches[0];
       handleStart(touch.clientX, touch.clientY);
     }
-  }, { passive: false });
+  }, { passive: true });
 
   window.addEventListener('touchmove', (e) => {
-    if (e.touches.length > 0 && isWiping) {
+    if (e.touches.length > 0 && isWiping && !isFogCleared) {
       const touch = e.touches[0];
       handleMove(touch.clientX, touch.clientY);
-      e.preventDefault();
+      if (e.cancelable) e.preventDefault();
     }
   }, { passive: false });
 
   window.addEventListener('touchend', handleEnd);
+  window.addEventListener('touchcancel', handleEnd);
 
   // ================= 5. HỆ THỐNG PHÁO HOA TRÁI TIM (SPARKLER HEARTS) =================
   let particles = [];
