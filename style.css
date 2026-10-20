@@ -244,14 +244,13 @@ body {
 
 /* ================= 4. ARTWORK STAGE: KIM LIÊN & DẠ NGUYỆT ================= */
 .artwork-stage {
-  position: absolute;
-  left: 50%;
-  top: 42%;
-  transform: translate(-50%, -50%);
-  width: min(65vw, 300px);
+  position: relative;
+  width: min(35vw, 175px);
   aspect-ratio: 1;
   pointer-events: none;
-  z-index: 6;
+  z-index: 8;
+  margin: 4px auto 2px auto;
+  flex-shrink: 0;
 }
 
 .halo-ring {
@@ -345,15 +344,15 @@ body {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 24px rgba(243, 208, 137, 0.5);
 }
 
-/* Cột Trái */
-.wish-card.pos-l1 { left: 4%; top: 22%; }
-.wish-card.pos-l2 { left: 2.5%; top: 38%; }
-.wish-card.pos-l3 { left: 4%; top: 54%; }
+/* Cột Trái Đối Xứng */
+.wish-card.pos-l1 { left: max(18px, calc(50% - 590px)); top: 26%; }
+.wish-card.pos-l2 { left: max(12px, calc(50% - 620px)); top: 46%; }
+.wish-card.pos-l3 { left: max(18px, calc(50% - 590px)); top: 66%; }
 
-/* Cột Phải */
-.wish-card.pos-r1 { right: 4%; top: 22%; }
-.wish-card.pos-r2 { right: 2.5%; top: 38%; }
-.wish-card.pos-r3 { right: 4%; top: 54%; }
+/* Cột Phải Đối Xứng */
+.wish-card.pos-r1 { right: max(18px, calc(50% - 590px)); top: 26%; }
+.wish-card.pos-r2 { right: max(12px, calc(50% - 620px)); top: 46%; }
+.wish-card.pos-r3 { right: max(18px, calc(50% - 590px)); top: 66%; }
 
 @keyframes floatCard {
   0% { transform: translateY(0); }
@@ -743,8 +742,8 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* ================= 10. RESPONSIVE MOBILE OPTIMIZATION ================= */
-@media (max-width: 768px) {
+/* ================= 10. RESPONSIVE TABLET & MOBILE OPTIMIZATION ================= */
+@media (max-width: 1024px) {
   #stage {
     position: relative;
     min-height: 100dvh;
